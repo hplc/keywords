@@ -1,0 +1,6 @@
+<a href="index.php" title="首页">首页</a><a href="adddata.php" title="添加关键词">添加关键词</a>
+<!--<a href="webdata.php" title="网址数据">网址数据</a>-->
+<a href="search.php" title="关键词搜索">关键词搜索</a>
+<!--<a href="log.php" title="SEO日志">日志</a><a href="tools.php" title="站长工具">站长工具</a><a href="so.php" title="综合搜索">综合搜索</a><a href="http://wrs.5d6d.net" target="_blank" title="产品论坛">论坛</a><a href="http://weibo.com/ckiy" target="_blank" title="新浪微博">微博</a>-->
+<a href="/logs/colomo.cn-access_log" title="日志">日志</a>
+<a href="admin/out.php" title="退出">退出</a>
