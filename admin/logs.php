@@ -24,21 +24,71 @@ include('../config/conn.php');
 <body>
 </br>
 <div align="center">
-<p class="title" id="title">关键词管理</p>
+<p class="title" id="title">访问日志</p>
     <?php
      include('header.php'); 
 	 include('listsql.php');
+
+    $logs = file('/var/log/httpd/colomo.cn-access_log');
+    $lines = array_reverse($logs);
+    $amount = count($lines);
+
 	 include('../page.php');
+
+    $start = ($page-1)*$page_size;
+    $end = $start + $page_size;
+    // var_dump($logs);
+    // var_dump(explode(' ', $lines[0]));
+
+    echo "<table width='60%' cellspacing='1' cellpadding='2'>
+            <tr bgcolor='#DBE6F5'>
+                <th>序号</th>
+                <th>时间</th>
+                <th>用户名</th>
+                <th>IP</th>
+                <th>URL</th>
+            </tr>";
+    for ($i=$start;$i<$end;$i++) {
+        $j = $i+1;
+        if (! empty($lines[$i])) {
+            $records = explode(' ', $lines[$i]);
+        } else {
+            continue;
+        }
+
+        // var_dump(substr(strtr($records[3], '2017:', '2017 '), 1));
+        if (preg_match('/\/keywords\//', $records[6])) {
+            $username = 'admin';
+        } else {
+            $username = '来宾';
+        }
+        $ip = $records[0];
+        $url = $records[6];
+
+        echo "<tr bgcolor='#DBE6F5'>
+                <td>$j</td>
+                <td>" . substr(strtr($records[3], '2017:', '2017 '), 1) . "</td>
+                <td>$username</td>
+                <td>$ip</td>
+                <td>$url</td>
+             </tr>";
+    }
+
+
+    echo "</table>";
+
+/*
 	 while($rs=mysql_fetch_object($result))  
     { 
-	  echo "
-    <table width='60%' cellspacing='1' cellpadding='2'>
+	  echo "<table>  
     <tr bgcolor='#DBE6F5'>
       <td><span style='float:left; text-align:left' title='".$rs->keyword."'><b>关键词：<font color=blue>$rs->keyword</font></b></span><span style='float: right; text-align:right'><a href=modify.php?id=".$rs->id." title='修改 ".$rs->keyword."'>修改</a>&nbsp;&nbsp;&nbsp;<a href='delete.php?id=$rs->id' title='删除 ".$rs->keyword."'>删除</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>时间：</b>$rs->time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
    </tr>
    </table>  
 ";
     }
+*/
+
 	echo "
 	<table width='60%' cellspacing='1' cellpadding='2'>
     <tr bgcolor='#EEF2F4'>
@@ -47,7 +97,7 @@ include('../config/conn.php');
    </table>
 	<table width='60%' cellspacing='1' cellpadding='2'>
     <tr bgcolor='#DBE6F5'>
-      <td><span style='float:left; text-align:left'><font color=#666666>$page_string</font></span><span style='float:right; text-align:left'><font color=#666666>每页显示<b>$page_size</b>条，总共有&nbsp;<b>$amount</b>&nbsp;个关键词。<font></span></td>
+      <td><span style='float:left; text-align:left'><font color=#666666>$page_string</font></span><span style='float:right; text-align:left'><font color=#666666>每页显示<b>$page_size</b>条，总共有&nbsp;<b>$amount</b>&nbsp;记录。<font></span></td>
    </tr>
    </table>
    <div id='footer'>
